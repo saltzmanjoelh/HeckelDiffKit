@@ -1,5 +1,7 @@
 # HeckelDiff
 
+[![Build Status][image-1]][1] [![Swift Version][image-2]][2]
+
 An implementation of Paul Heckel's diff algorithm described in the paper, "A technique for isolating differences between files". I've modified it in a few ways:
 
 - Repeated text will be correctly identified as unique so long as the *number* of repeats is also unique. That is, diff('a b b b a', 'c b b b c') will be read as '-a +c b b b -a +c' rather than '-a -b -b -b -a +c +b +b +b +c', as would be the case with the original paper. If there are multiple repeated tokens of the same length, the original problem will still apply if there are no uniquely identifiable lines between them.
@@ -73,3 +75,10 @@ The tests could stand to be expanded on, but should cover the basics. Test sugge
 - [google-diff-match-patch](https://github.com/lqc/google-diff-match-patch) another LCS-based implementation, seems to be more efficient than JsDiff, offers some interesting tuning options, along with lots of optimizations, but still weighed in at around 2 seconds for my test case.
 - [XinDiff](https://sourceforge.net/projects/xindiff/) based on the Heckel algorithm (I think?), bundles in view rendering, but the website is down and the API is unclear.
 - [Resig's jsdiff.js](http://ejohn.org/projects/javascript-diff-algorithm/), seems to have some bugs, not be maintained or particularly usable.
+
+
+[1]:	https://travis-ci.org/saltzmanjoelh/HeckelDiffKit
+[2]:	https://swift.org "Swift"
+
+[image-1]:	https://travis-ci.org/saltzmanjoelh/HeckelDiffKit.svg
+[image-2]:	https://img.shields.io/badge/swift-version%203-blue.svg
