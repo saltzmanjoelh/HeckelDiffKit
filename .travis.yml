@@ -1,4 +1,4 @@
 language: objective-c
 osx_image: xcode8.2
-xcode_project: HeckelDiffKit/HeckelDiffKit.xcodeproj
+xcode_project: HeckelDiffKit.xcodeproj
 xcode_scheme: HeckelDiffKit
