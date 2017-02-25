@@ -1,4 +1,4 @@
 language: objective-c
-osx_image: xcode8
-xcode_project: HeckelDiffKit.xcodeproj
-xcode_scheme: HeckelDiffKit
+osx_image: xcode8.2
+script:
+ - "xcodebuild test -project HeckelDiffKit.xcodeproj -scheme HeckelDiffKit"
