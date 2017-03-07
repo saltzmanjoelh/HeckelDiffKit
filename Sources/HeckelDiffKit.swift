@@ -1,12 +1,12 @@
 import Foundation
 
-struct Token <V: Hashable>: Equatable {
-    let value: V
-    var ref: Int
-    var count: Int
-    let eof: Bool
+public struct Token <V: Hashable>: Equatable {
+    public let value: V
+    public var ref: Int
+    public var count: Int
+    public let eof: Bool
     
-    init(value: V, ref: Int, count: Int, eof: Bool = false) {
+    public init(value: V, ref: Int, count: Int, eof: Bool = false) {
         self.value = value
         self.ref = ref
         self.count = count
@@ -14,7 +14,7 @@ struct Token <V: Hashable>: Equatable {
     }
     
     @discardableResult
-    static postfix func ++(x: inout Token) -> Token {
+    public static postfix func ++(x: inout Token) -> Token {
         x.count += 1
         return x
     }
@@ -23,15 +23,15 @@ struct Token <V: Hashable>: Equatable {
     }
 }
 
-struct DiffIndex: Equatable {
-    enum Side {
+public struct DiffIndex: Equatable {
+    public enum Side {
         case left
         case right
     }
-    var left: Int = -1
-    var right: Int = -1
+    public var left: Int = -1
+    public var right: Int = -1
     
-    subscript(side: Side) -> Int {
+    public subscript(side: Side) -> Int {
         get{
             switch side {
             case .left:
@@ -53,22 +53,22 @@ struct DiffIndex: Equatable {
         return lhs.left == rhs.left && lhs.right == rhs.right
     }
 }
-enum DiffResultType {
+public enum DiffResultType {
     case same
     case insert
     case delete
 }
-struct DiffResult<V: Hashable>: Equatable {
-    let type: DiffResultType
-    let value: V
+public struct DiffResult<V: Hashable>: Equatable {
+    public let type: DiffResultType
+    public let value: V
     public static func ==(lhs: DiffResult, rhs: DiffResult) -> Bool {
         return lhs.type == rhs.type && lhs.value == rhs.value
     }
 }
 
-struct Heckel {
+public struct Heckel {
 
-    static func splitInclusive(string inputString: String, separator: String, trim: Bool = false) -> [String] {
+    public static func splitInclusive(string inputString: String, separator: String, trim: Bool = false) -> [String] {
         guard inputString.characters.count > 0 else {
             return []
         }
@@ -86,7 +86,7 @@ struct Heckel {
         return result
     }
 
-    static func flattenRepeats<V>(result: [Token<V>], currentValue: V) -> [Token<V>] {
+    public static func flattenRepeats<V>(result: [Token<V>], currentValue: V) -> [Token<V>] {
         var resultCopy = result
         if result.count > 0 && result[result.count-1].value == currentValue {
             resultCopy[resultCopy.count-1]++
@@ -99,7 +99,7 @@ struct Heckel {
     // [ ("d": ["1": ["left":1, "right":2]]) ]
     // [ (V: (count: [left:marker, right:marker]) ) ]
     // side| -1 = uninitialized, -2 = found further out, otherwise index of location
-    static func addToTable<V: Hashable>(table: [V:[Int:DiffIndex]], tokens: [Token<V>], type: DiffIndex.Side) ->   [V:[Int:DiffIndex]] {
+    public static func addToTable<V: Hashable>(table: [V:[Int:DiffIndex]], tokens: [Token<V>], type: DiffIndex.Side) ->   [V:[Int:DiffIndex]] {
         var result = table //get a copy
         for (index, token) in tokens.enumerated() {
             if result[token.value] == nil {
@@ -119,7 +119,7 @@ struct Heckel {
         }
         return result
     }
-    static func findUnique<V>(table: [V:[Int:DiffIndex]], left: inout [Token<V>], right: inout [Token<V>]) {
+    public static func findUnique<V>(table: [V:[Int:DiffIndex]], left: inout [Token<V>], right: inout [Token<V>]) {
         for token in left {
             if let ref = table[token.value]?[token.count] {
                 if ref.left >= 0 && ref.right >= 0 {
@@ -130,7 +130,7 @@ struct Heckel {
         }
     }
     
-    static func expandUnique<V:Hashable>(table: [V:[Int:DiffIndex]], left: inout [Token<V>], right: inout [Token<V>], direction: Int) {
+    public static func expandUnique<V:Hashable>(table: [V:[Int:DiffIndex]], left: inout [Token<V>], right: inout [Token<V>], direction: Int) {
         for (index, token) in left.enumerated() {
             if token.ref == -1 {
                 continue
@@ -160,17 +160,17 @@ struct Heckel {
         }
     }
     
-    static func push<V: Hashable>(accumulator: inout [DiffResult<V>], token: Token<V>, type: DiffResultType) {
+    public static func push<V: Hashable>(accumulator: inout [DiffResult<V>], token: Token<V>, type: DiffResultType) {
         for _ in 0..<token.count {
 //            print("type: \(type) value: \(token.value)")
             accumulator.append(DiffResult.init(type: type, value: token.value))
         }
     }
-    static func calcDist(lTarget: Int, lPos: Int, rTarget: Int, rPos: Int) -> Int {
+    public static func calcDist(lTarget: Int, lPos: Int, rTarget: Int, rPos: Int) -> Int {
         return (lTarget - lPos) + (rTarget - rPos) + abs((lTarget - lPos) - (rTarget - rPos))
     }
     
-    static func processDiff<V: Hashable>(left: [Token<V>], right: [Token<V>]) -> [DiffResult<V>]
+    public static func processDiff<V: Hashable>(left: [Token<V>], right: [Token<V>]) -> [DiffResult<V>]
     {
         var acc = [DiffResult<V>]()
         var lPos = 0, rPos = 0, lx = left.count
@@ -270,20 +270,20 @@ struct Heckel {
         return acc
     }
 
-    static func diffLines(left: String, right: String, trim: Bool = true) -> [DiffResult<String>] {
+    public static func diffLines(left: String, right: String, trim: Bool = true) -> [DiffResult<String>] {
         return diff(
             left: splitInclusive(string: left, separator:"\n", trim: trim),
             right: splitInclusive(string: right, separator:"\n", trim: trim)
         )
     }
     
-    static func diffWords(left: String, right: String, trim: Bool = true) -> [DiffResult<String>] {
+    public static func diffWords(left: String, right: String, trim: Bool = true) -> [DiffResult<String>] {
         return diff(
             left: splitInclusive(string: left, separator:" ", trim: trim),
             right: splitInclusive(string: right, separator:" ", trim: trim)
         )
     }
-    static func diff<V: Hashable>(left: [V], right: [V]) -> [DiffResult<V>] {
+    public static func diff<V: Hashable>(left: [V], right: [V]) -> [DiffResult<V>] {
 
         // if they're the same, no need to do all that work...
         if left == right {
