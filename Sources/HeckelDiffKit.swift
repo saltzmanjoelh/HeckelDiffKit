@@ -99,7 +99,7 @@ public struct Heckel {
     // [ ("d": ["1": ["left":1, "right":2]]) ]
     // [ (V: (count: [left:marker, right:marker]) ) ]
     // side| -1 = uninitialized, -2 = found further out, otherwise index of location
-    public static func addToTable<V: Hashable>(table: [V:[Int:DiffIndex]], tokens: [Token<V>], type: DiffIndex.Side) ->   [V:[Int:DiffIndex]] {
+    public static func addToTable<V>(table: [V:[Int:DiffIndex]], tokens: [Token<V>], type: DiffIndex.Side) ->   [V:[Int:DiffIndex]] {
         var result = table //get a copy
         for (index, token) in tokens.enumerated() {
             if result[token.value] == nil {
@@ -130,7 +130,7 @@ public struct Heckel {
         }
     }
     
-    public static func expandUnique<V:Hashable>(table: [V:[Int:DiffIndex]], left: inout [Token<V>], right: inout [Token<V>], direction: Int) {
+    public static func expandUnique<V>(table: [V:[Int:DiffIndex]], left: inout [Token<V>], right: inout [Token<V>], direction: Int) {
         for (index, token) in left.enumerated() {
             if token.ref == -1 {
                 continue
@@ -160,7 +160,7 @@ public struct Heckel {
         }
     }
     
-    public static func push<V: Hashable>(accumulator: inout [DiffResult<V>], token: Token<V>, type: DiffResultType) {
+    public static func push<V>(accumulator: inout [DiffResult<V>], token: Token<V>, type: DiffResultType) {
         for _ in 0..<token.count {
 //            print("type: \(type) value: \(token.value)")
             accumulator.append(DiffResult.init(type: type, value: token.value))
@@ -170,7 +170,7 @@ public struct Heckel {
         return (lTarget - lPos) + (rTarget - rPos) + abs((lTarget - lPos) - (rTarget - rPos))
     }
     
-    public static func processDiff<V: Hashable>(left: [Token<V>], right: [Token<V>]) -> [DiffResult<V>]
+    public static func processDiff<V>(left: [Token<V>], right: [Token<V>]) -> [DiffResult<V>]
     {
         var acc = [DiffResult<V>]()
         var lPos = 0, rPos = 0, lx = left.count
