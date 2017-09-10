@@ -81,4 +81,4 @@ The tests could stand to be expanded on, but should cover the basics. Test sugge
 [2]:	https://swift.org "Swift"
 
 [image-1]:	https://travis-ci.org/saltzmanjoelh/HeckelDiffKit.svg
-[image-2]:	https://img.shields.io/badge/swift-version%203-blue.svg
+[image-2]:	https://img.shields.io/badge/swift-version%204-blue.svg
