@@ -69,14 +69,14 @@ public struct DiffResult<V: Hashable>: Equatable {
 public struct Heckel {
 
     public static func splitInclusive(string inputString: String, separator: String, trim: Bool = false) -> [String] {
-        guard inputString.characters.count > 0 else {
+        guard inputString.count > 0 else {
             return []
         }
         
         let split = inputString.components(separatedBy: separator)
         if trim {
             return split.filter{
-                return $0.characters.count > 0
+                return $0.count > 0
             }
         }
         var result = [String]()
